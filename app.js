@@ -8,6 +8,11 @@ var { mongoose } = require('./mongoose_db');
 
 app.use(bodyParser.json());
 
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
+
 // For CORS,Pgm Line no 12 to 29    from https://github.com/anishpdm/ExpressApi.git
 app.use(function (req, res, next) {
 
@@ -54,7 +59,6 @@ app.get('/validateuser/:empid/:password', (req, res) => {
     var dbPass;
     Users.find({ "empid": empid }).then((data) => {
         if (!data) {
-            console.log("error");
             return res.status(400).send();
 
         }
@@ -115,7 +119,6 @@ app.get('/cabhistory', (req, res) => {
     // CabHistory.find({ "mapid": mapid }).sort({"date":-1,"time":-1}).then((data) => {
         CabHistory.find().sort({"date":-1,"time":-1}).then((data) => {
         if (!data) {
-            console.log("error");
             return res.status(400).send();
 
         }
@@ -180,6 +183,6 @@ app.delete('/cabhistory/:bookid', (req, res) => {
         });
 });
 
-app.listen(3000, () => {
-    console.log("Server started at http://localhost:3000/");
+app.listen(port, () => {
+    console.log("Server started with port "+port);
 });
